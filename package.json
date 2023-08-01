@@ -1,0 +1,30 @@
+{
+  "name": "gitmanagement",
+  "version": "0.0.0",
+  "description": "A tool that helps with git management from a starting directory",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Wout Slabbinck",
+  "license": "ISC",
+  "dependencies": {
+    "@inquirer/select": "^1.2.6",
+    "cross-fetch": "^4.0.0",
+    "git-url-parse": "^13.1.0",
+    "inquirer": "8.0.0",
+    "n3": "^1.17.0",
+    "rdf-js": "^4.0.2",
+    "rdf-parse": "^2.3.2",
+    "rdf-store-stream": "^2.0.0",
+    "simple-git": "^3.19.1",
+    "streamify-string": "^1.0.1"
+  },
+  "devDependencies": {
+    "@types/git-url-parse": "^9.0.1",
+    "@types/inquirer": "^9.0.3",
+    "@types/n3": "^1.16.0",
+    "ts-node": "10.9.1",
+    "typescript": "5.1.6"
+  }
+}
