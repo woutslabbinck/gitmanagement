@@ -2,9 +2,9 @@
   "name": "gitmanagement",
   "version": "0.0.0",
   "description": "A tool that helps with git management from a starting directory",
-  "main": "index.js",
+  "main": "dist/index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "build": "tsc"
   },
   "author": "Wout Slabbinck",
   "license": "ISC",
@@ -18,7 +18,8 @@
     "rdf-parse": "^2.3.2",
     "rdf-store-stream": "^2.0.0",
     "simple-git": "^3.19.1",
-    "streamify-string": "^1.0.1"
+    "streamify-string": "^1.0.1",
+    "yargs":"17.7.2"
   },
   "devDependencies": {
     "@types/git-url-parse": "^9.0.1",

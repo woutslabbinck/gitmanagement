@@ -1,49 +1,7 @@
-
-import { Quad, Store, DataFactory } from "n3";
-import { GitDescription, RepositoryType, fetchGitDescription, fetchGitRepos } from "./GitUtil"
-import { NamedNode } from "n3";
-import { GITMANAGEMENT, RDF, VCARD, XSD } from "./src/Vocabularies";
-import * as path from "path"
-import * as fs from "fs"
-import { fileAsStore, storeToString } from "./src/RDFUtil";
+import { Quad, Store, DataFactory, NamedNode } from "n3";
+import { GitDescription, RepositoryType } from "./GitUtil";
+import { GITMANAGEMENT, RDF, XSD } from "./Vocabularies";
 const { namedNode, literal } = DataFactory;
-
-const directory = "/home/wouts/Documents/repos"
-
-async function firstFetch() {
-    const repos = fetchGitRepos(directory);
-    const entriesForRepo: GitEntry[] = []
-    for (const dir of repos) {
-        try {
-            const gitDescription = await fetchGitDescription(dir)
-            entriesForRepo.push(new GitEntry({ gitDescription, path: dir }))
-        } catch (e) {
-            console.log(e);
-            console.log("could not fetch this dir " + dir);
-        }
-    }
-    const store = new Store()
-    
-    for (const gitEntry of entriesForRepo) {
-        store.addQuad(namedNode("urn:path"+directory), VCARD.terms.hasMember,gitEntry.identifier)
-        store.addQuads(gitEntry.quads);
-    }
-    fs.writeFileSync(path.join(directory,'gitState.ttl'),storeToString(store))
-    
-}
-// firstFetch()
-
-async function load(){
-    const baseDirIdentifier = namedNode("urn:path"+directory)
-    const store:Store = await fileAsStore(path.join(directory,'gitState.ttl'))
-    const nodes = store.getQuads(baseDirIdentifier, VCARD.hasMember, null, null).map(quad => quad.object)
-
-    const nodeIdentifier = nodes[0]
-    const node = store.getQuads(nodeIdentifier,null,null,null);
-
-    console.log(parseGitEntry(node))
-}
-// load()
 
 export class GitEntry {
     protected gitDescription: GitDescription;
