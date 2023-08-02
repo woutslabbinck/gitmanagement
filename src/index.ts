@@ -25,18 +25,17 @@ export async function runner() {
     const environment = await environmentPrompt();
     switch (environment) {
         case "terminal":
-            spawn('gnome-terminal', ['--working-directory=' + repositoryPath])
+            spawn('gnome-terminal', ['--working-directory=' + repositoryPath]).unref()
 
             break;
         case "code":
-            spawn('code', [repositoryPath])
-
+            spawn('code', [repositoryPath]).unref()
             break;
         case "webstorm":
-            spawn('webstorm', [repositoryPath])
+            spawn('webstorm', [repositoryPath]).unref()
             break;
         case "explorer":
-            spawn('nautilus', [repositoryPath])
+            spawn('nautilus', [repositoryPath]).unref()
             break;    
         default:
             break;
