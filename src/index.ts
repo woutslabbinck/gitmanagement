@@ -40,4 +40,5 @@ export async function runner() {
         default:
             break;
     }
+    process.exit()
 }
