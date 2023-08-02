@@ -85,6 +85,10 @@ export async function environmentPrompt(): Promise<string> {
         {
             name: "WebStorm",
             value: "webstorm",
+        },
+        {
+            name: "File Explorer",
+            value: "explorer",
         }
     ]
     const answer = await select({

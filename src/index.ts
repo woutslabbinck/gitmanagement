@@ -35,6 +35,9 @@ export async function runner() {
         case "webstorm":
             spawn('webstorm', [repositoryPath])
             break;
+        case "explorer":
+            spawn('nautilus', [repositoryPath])
+            break;    
         default:
             break;
     }
