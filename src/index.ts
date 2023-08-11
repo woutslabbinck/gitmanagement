@@ -1,24 +1,34 @@
 
 import { spawn } from 'child_process';
-import { GitEntry } from "./GitEntry";
-import { fetchAndWrite, load, stateExists } from "./State";
+import { GitState, createState, loadState, stateExists, updateState, writeState } from "./State";
 import { environmentPrompt, repositoryChoicePrompt, repositoryPartialPrompt } from "./cli/InquirerCliExtractor";
 import { inputParameters } from "./cli/YargsCliExtractor";
 
 export async function runner() {
     const params = inputParameters();
     const directory = params.path;
+    const reload = params.reload;
 
-    let entries: GitEntry[]
+
+
+    let state: GitState
     if (stateExists(directory)) {
         console.log("Loading state file.");
-        entries = await load(directory)
+        state = await loadState(directory)
+        if (reload) {
+            console.log("Fetching all repositories again.");
+            const newState = await createState(directory)
+            state = updateState(state, newState)
+            writeState(directory, state)           
+        } 
+
     } else {
         console.log("Fetching all repositories.");
-        await fetchAndWrite(directory)
-        entries = await load(directory)
+        state = await createState(directory)
+        writeState(directory, state)
     }
 
+    const entries = state.entries
 
     const partialRepository = await repositoryPartialPrompt();
     const repositoryPath = await repositoryChoicePrompt(partialRepository, entries);

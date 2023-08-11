@@ -1,4 +1,4 @@
-import { Quad, Store, DataFactory, NamedNode } from "n3";
+import { DataFactory, NamedNode, Quad, Store } from "n3";
 import { GitDescription, RepositoryType } from "./GitUtil";
 import { GITMANAGEMENT, RDF, XSD } from "./Vocabularies";
 const { namedNode, literal } = DataFactory;
@@ -6,14 +6,14 @@ const { namedNode, literal } = DataFactory;
 export class GitEntry {
     protected gitDescription: GitDescription;
     protected _path: string
-    protected lastUpdated: Date;
+    protected _lastUpdated: Date;
+    protected _visited: number
 
-    constructor(args: { gitDescription: GitDescription, lastUpdated?: Date, path: string }) {
-        const { path, gitDescription, lastUpdated } = args
-
+    constructor({ gitDescription, lastUpdated, path, visited = 1 }: { gitDescription: GitDescription, lastUpdated?: Date, path: string, visited?: number }) {
         this.gitDescription = gitDescription;
-        this.lastUpdated = lastUpdated ?? new Date();
+        this._lastUpdated = lastUpdated ?? new Date();
         this._path = path;
+        this._visited = visited
     }
 
     get quads(): Quad[] {
@@ -31,12 +31,12 @@ export class GitEntry {
                 break;
         }
         store.addQuad(this.identifier, GITMANAGEMENT.terms.description, literal(this.gitDescription.description));
-        store.addQuad(this.identifier, GITMANAGEMENT.terms.lastFetched, literal(this.lastUpdated.toISOString(), XSD.terms.dateTime));
+        store.addQuad(this.identifier, GITMANAGEMENT.terms.lastFetched, literal(this._lastUpdated.toISOString(), XSD.terms.dateTime));
         store.addQuad(this.identifier, GITMANAGEMENT.terms.path, literal(this._path));
         store.addQuad(this.identifier, GITMANAGEMENT.terms.origin, namedNode(this.gitDescription.originURL));
         store.addQuad(this.identifier, GITMANAGEMENT.terms.organisation, namedNode(this.gitDescription.organisation));
         store.addQuad(this.identifier, GITMANAGEMENT.terms.repositoryName, namedNode(this.gitDescription.repositoryName));
-        store.addQuad(this.identifier, GITMANAGEMENT.terms.visited, literal(1));
+        store.addQuad(this.identifier, GITMANAGEMENT.terms.visited, literal(this.visited));
         return store.getQuads(null, null, null, null)
     }
 
@@ -48,13 +48,24 @@ export class GitEntry {
         return this._path
     }
 
-    
-    get name() : string {
+    get name(): string {
         return this.gitDescription.repositoryName
     }
-    
+
     get description(): string {
         return this.gitDescription.description
+    }
+
+    get visited(): number {
+        return this._visited
+    }
+
+    get lastUpdated(): Date {
+        return this._lastUpdated
+    }
+
+    public updateVisited(visited:number): void {
+        this._visited = visited
     }
 }
 
@@ -82,6 +93,6 @@ export function parseGitEntry(entryQuads: Quad[]): GitEntry {
     }
     const path = store.getQuads(null, GITMANAGEMENT.path, null, null)[0]!.object.value;
     const lastUpdated = new Date(store.getQuads(null, GITMANAGEMENT.lastFetched, null, null)[0]!.object.value);
-
-    return new GitEntry({ gitDescription, path, lastUpdated })
+    const visited = parseInt(store.getQuads(null, GITMANAGEMENT.visited, null, null)[0]!.object.value);
+    return new GitEntry({ gitDescription, path, lastUpdated, visited })
 }
