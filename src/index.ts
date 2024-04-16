@@ -36,10 +36,12 @@ export async function runner() {
     switch (environment) {
         case "terminal":
             spawn('gnome-terminal', ['--working-directory=' + repositoryPath]).unref()
-
             break;
         case "code":
             spawn('code', [repositoryPath]).unref()
+            break;
+        case "codium":
+            spawn('codium', [repositoryPath]).unref()
             break;
         case "webstorm":
             spawn('webstorm', [repositoryPath]).unref()

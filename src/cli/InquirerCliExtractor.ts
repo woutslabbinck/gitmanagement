@@ -78,9 +78,13 @@ export async function environmentPrompt(): Promise<string> {
             name: "terminal",
             value: "terminal",
         },
+        // {
+        //     name: "Visual Studio Code",
+        //     value: "code",
+        // },
         {
-            name: "Visual Studio Code",
-            value: "code",
+            name: "Visual Studio Codium",
+            value: "codium",
         },
         {
             name: "WebStorm",
