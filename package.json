@@ -1,6 +1,6 @@
 {
   "name": "gitmanagement",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "description": "A tool that helps with git management from a starting directory",
   "main": "dist/index.js",
   "scripts": {

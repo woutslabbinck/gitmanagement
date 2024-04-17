@@ -34,8 +34,8 @@ export class GitEntry {
         store.addQuad(this.identifier, GITMANAGEMENT.terms.lastFetched, literal(this._lastUpdated.toISOString(), XSD.terms.dateTime));
         store.addQuad(this.identifier, GITMANAGEMENT.terms.path, literal(this._path));
         store.addQuad(this.identifier, GITMANAGEMENT.terms.origin, namedNode(this.gitDescription.originURL));
-        store.addQuad(this.identifier, GITMANAGEMENT.terms.organisation, namedNode(this.gitDescription.organisation));
-        store.addQuad(this.identifier, GITMANAGEMENT.terms.repositoryName, namedNode(this.gitDescription.repositoryName));
+        store.addQuad(this.identifier, GITMANAGEMENT.terms.organisation, literal(this.gitDescription.organisation));
+        store.addQuad(this.identifier, GITMANAGEMENT.terms.repositoryName, literal(this.gitDescription.repositoryName));
         store.addQuad(this.identifier, GITMANAGEMENT.terms.visited, literal(this.visited));
         return store.getQuads(null, null, null, null)
     }

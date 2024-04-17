@@ -47,7 +47,7 @@ export async function fetchGitDescription(repositoryPath: string, options?: any)
     const response = await fetch(`https://api.github.com/repos/${organisation}/${repositoryName}`)
     const ghApiJSON = await response.json()
 
-    const description = ghApiJSON.description
+    const description = ghApiJSON.description ?? ''
     let repositoryType: RepositoryType = RepositoryType.UNKNOWN;
     if (ghApiJSON) {
         repositoryType = ghApiJSON.source ? RepositoryType.FORK : RepositoryType.CLONE;
